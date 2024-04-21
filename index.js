@@ -1,22 +1,26 @@
 // import default
 const express = require("express");
+require("dotenv").config(); // Load environment variables
+const path = require("path");
 
 // import from files
 const authRouter = require("./routes/auth");
-const { Mongoose, mongo, default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 
-//init
+// init
 const app = express();
 const PORT = 3000;
-const DB =
-  "mongodb+srv://Mohanraj:Mohan2004@cluster0.ogcmvth.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
+const DB = process.env.DB_URL;
 
 app.use(express.json());
 app.use(authRouter);
 
-//connections
+// connections
 mongoose
-  .connect(DB)
+  .connect(DB, {
+    useNewUrlParser: true,
+  })
   .then(() => {
     console.log("Connection Successful");
   })
@@ -24,6 +28,6 @@ mongoose
     console.log(e);
   });
 
-app.listen(PORT, "127.0.0.1", () => {
-  console.log(`Listening at ${PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
